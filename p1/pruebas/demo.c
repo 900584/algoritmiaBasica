@@ -1,1 +1,1 @@
-// pruebas/demo.cpp
+// pruebas/demo.c

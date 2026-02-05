@@ -1,10 +1,17 @@
 import cv2
+import numpy as np
 import os
 import sys
 
+def _imread_unicode(path, flags=cv2.IMREAD_GRAYSCALE):
+    """Lee una imagen desde una ruta con caracteres Unicode (ej. 3º en Windows)."""
+    with open(path, "rb") as f:
+        buf = np.frombuffer(f.read(), dtype=np.uint8)
+    return cv2.imdecode(buf, flags)
+
 def png_to_pgm(input_path, output_path):
     """Convierte PNG a PGM (formato ASCII P2)"""
-    img_gray = cv2.imread(input_path, 0)
+    img_gray = _imread_unicode(input_path, cv2.IMREAD_GRAYSCALE)
     
     if img_gray is None:
         print(f"Error: No se pudo leer {input_path}")
@@ -24,13 +31,15 @@ def png_to_pgm(input_path, output_path):
 
 def pgm_to_png(input_path, output_path):
     """Convierte PGM a PNG"""
-    img_gray = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
+    img_gray = _imread_unicode(input_path, cv2.IMREAD_GRAYSCALE)
     
     if img_gray is None:
         print(f"Error: No se pudo leer {input_path}")
         return False
     
-    cv2.imwrite(output_path, img_gray)
+    _, buf = cv2.imencode(".png", img_gray)
+    with open(output_path, "wb") as f:
+        f.write(buf.tobytes())
     
     print(f"PGM → PNG")
     print(f"  Entrada: {input_path}")

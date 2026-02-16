@@ -23,7 +23,7 @@ def png_to_pgm(input_path, output_path):
         for row in img_gray:
             f.write(' '.join(map(str, row)) + '\n')
     
-    print(f"PNG → PGM")
+    print(f"PNG -> PGM")
     print(f"  Entrada: {input_path}")
     print(f"  Salida:  {output_path}")
     print(f"  Tamaño:  {img_gray.shape}")
@@ -41,7 +41,7 @@ def pgm_to_png(input_path, output_path):
     with open(output_path, "wb") as f:
         f.write(buf.tobytes())
     
-    print(f"PGM → PNG")
+    print(f"PGM -> PNG")
     print(f"  Entrada: {input_path}")
     print(f"  Salida:  {output_path}")
     print(f"  Tamaño:  {img_gray.shape}")

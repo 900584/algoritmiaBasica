@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Práctica 1: Algoritmos Voraces - String Art
 
 ## Descripción General
@@ -211,4 +211,3 @@ gcc code/voraz.c -o code/voraz
 ```
 
 El programa se encargará de completar en todos los casos la ruta hasta `imagenes/pixel/` (tal y como está configurado en `code/voraz.c`).
->>>>>>> b145af6a19adc05e6dfea3e58d195c411d0f40a7

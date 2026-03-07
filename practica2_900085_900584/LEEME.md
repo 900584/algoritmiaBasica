@@ -1,20 +1,24 @@
 # Practica 2: Programacion Dinamica - Particion de palabras
 
-## Autores
+**Algoritmia Basica · Grado en Ingenieria Informatica · Curso 2025/26 · Universidad de Zaragoza**
 
+**Autores:**
 - Ibón Castarlenas Cortés — NIA: 900085
 - David Puértolas Merenciano — NIA: 900584
 
 ---
 
-## Descripcion general
+## Descripcion
 
-Este proyecto implementa un algoritmo de **programacion dinamica** para resolver el problema de la **particion de palabras**: determinar si una cadena de entrada puede dividirse en una secuencia de palabras de un diccionario, y en caso afirmativo, listar todas las particiones posibles.
+Dado un texto sin espacios y un diccionario de palabras, el programa determina si el texto
+puede dividirse en una secuencia de palabras del diccionario y, en caso afirmativo, lista
+todas las particiones posibles. Se implementan tres variantes del algoritmo:
 
-Se implementan **tres variantes** del algoritmo:
-1. **Variante 1**: Solucion recursiva pura
-2. **Variante 2**: Solucion recursiva con memoria (memoizacion)
-3. **Variante 3**: Solucion iterativa con tabla (bottom-up)
+| Variante | Estrategia | Coste (decision) |
+|---|---|---|
+| 1 | Recursiva pura | Exponencial |
+| 2 | Recursiva con memoizacion | O(n²) |
+| 3 | Iterativa con tabla (bottom-up) | O(n²) |
 
 ---
 
@@ -22,98 +26,97 @@ Se implementan **tres variantes** del algoritmo:
 
 ```
 practica2_900085_900584/
-├── LEEME.md                    # Este archivo
-├── ejecutar.sh                 # Script de compilacion y ejecucion
+├── LEEME.md
+├── ejecutar.sh                     # Compila, ejecuta pruebas y experimentos
+├── memoria.docx / memoria.pdf      # Informe de la practica
 ├── code/
-│   └── separarPalabras.c       # Codigo fuente del programa
+│   └── separarPalabras.c           # Codigo fuente
+├── tools/
+│   ├── generar_pruebas.py          # Genera diccionarios y textos de prueba grandes
+│   └── generar_memoria.py          # Genera el informe en .docx
 └── pruebas/
-    ├── diccionario_ejemplo.txt # Diccionario del enunciado
-    ├── texto_megusta.txt       # Entrada: megusta
-    ├── texto_megustasoldar.txt # Entrada: megustasoldar
-    ├── texto_megustadolar.txt  # Entrada: megustadolar
-    ├── texto_solo.txt          # Entrada: sol
-    └── texto_helado.txt        # Entrada: helado
+    ├── diccionario_ejemplo.txt     # Diccionario del enunciado (12 palabras)
+    ├── texto_megusta.txt           # Entrada: megusta
+    ├── texto_megustasoldar.txt     # Entrada: megustasoldar
+    ├── texto_megustadolar.txt      # Entrada: megustadolar
+    ├── texto_solo.txt              # Entrada: sol
+    ├── texto_helado.txt            # Entrada: helado
+    ├── texto_melado.txt            # Entrada: melado
+    ├── diccionario_100.txt         # Generado por generar_pruebas.py
+    ├── diccionario_1000.txt        # Generado por generar_pruebas.py
+    ├── diccionario_5000.txt        # Generado por generar_pruebas.py
+    ├── texto_100_valido.txt        # numPal/10 palabras del diccionario de 100
+    ├── texto_100_mutado.txt        # texto_100_valido con mutaciones aleatorias
+    ├── texto_1000_valido.txt
+    ├── texto_1000_mutado.txt
+    ├── texto_5000_valido.txt
+    └── texto_5000_mutado.txt
 ```
+
+Los ficheros `diccionario_N.txt` y `texto_N_*.txt` se generan automaticamente
+al ejecutar `bash ejecutar.sh` (o manualmente con `python3 tools/generar_pruebas.py`).
 
 ---
 
-## Compilacion
+## Compilacion y ejecucion
 
-El programa se compila automaticamente al ejecutar `ejecutar.sh`. Para compilar manualmente:
+### Compilacion manual
 
 ```bash
 gcc -O2 -o separarPalabras code/separarPalabras.c -std=c99
 ```
 
-El ejecutable resultante se llama `separarPalabras`.
-
----
-
-## Ejecucion
-
-### Forma de uso
+### Uso del programa
 
 ```bash
 ./separarPalabras <var> <diccionario> <texto>
 ```
 
-**Parametros:**
-- `var`: Variante del algoritmo (1, 2 o 3)
-  - **1**: Solucion recursiva pura
-  - **2**: Solucion recursiva con memoizacion
-  - **3**: Solucion iterativa con tabla
-- `diccionario`: Ruta al fichero con las palabras del diccionario (una por linea)
-- `texto`: Ruta al fichero con la cadena a verificar (sin espacios)
+- `var`: variante del algoritmo (`1` recursiva, `2` con memoizacion, `3` tabla)
+- `diccionario`: fichero con las palabras, una por linea
+- `texto`: fichero con la cadena a verificar (los espacios se ignoran)
 
-**Ejemplos:**
-```bash
-./separarPalabras 1 pruebas/diccionario_ejemplo.txt pruebas/texto_megusta.txt
-./separarPalabras 2 pruebas/diccionario_ejemplo.txt pruebas/texto_megustasoldar.txt
-./separarPalabras 3 pruebas/diccionario_ejemplo.txt pruebas/texto_megustadolar.txt
-```
+**Salida:**
+- Si es posible: `Si.` seguido de la lista de particiones con formato `- 'palabra1 palabra2 ...'`
+- Si no es posible: `No.`
 
-### Ejecucion automatica con script
+### Ejecucion automatica (pruebas + experimentos)
 
 ```bash
 bash ejecutar.sh
 ```
 
-Este script compila el programa y ejecuta todos los casos de prueba con las tres variantes donde procede.
+El script:
+1. Compila el programa
+2. Ejecuta los casos basicos del enunciado con las tres variantes
+3. Genera los ficheros de prueba grandes (`generar_pruebas.py`)
+4. Ejecuta las tres variantes sobre cada escenario de experimento midiendo tiempos
+   (con limite de 60s por ejecucion para evitar esperas excesivas)
 
 ---
 
-## Formato de los ficheros
+## Ficheros de prueba
 
-### Diccionario
-- Fichero de texto con una palabra por linea
-- Se ignoran espacios en blanco extra
-- Ejemplo:
-  ```
-  me
-  gusta
-  sol
-  dar
-  soldar
-  ```
+### Formato
 
-### Texto de entrada
-- Fichero con la cadena a verificar
-- Se eliminan espacios, saltos de linea y tabulaciones
-- Ejemplo: el contenido `megustasoldar` representa la cadena sin espacios
+- **Diccionario**: una palabra por linea; se ignoran espacios extra y puntuacion al final
+- **Texto**: la cadena a verificar; los espacios, tabulaciones y saltos de linea se eliminan
 
----
+### Generacion de ficheros grandes (Tarea 3)
 
-## Salida del programa
-
-- **Si se puede particionar**: imprime `Si.` seguido de las particiones, cada una con formato `  • 'palabra1 palabra2 ...'`
-- **Si no se puede**: imprime `No.`
-
-**Ejemplo de salida (megustasoldar):**
+```bash
+python3 tools/generar_pruebas.py [--seed N]
 ```
-Si.
-  • 'me gusta soldar'
-  • 'me gusta sol dar'
-```
+
+Para cada tamaño N ∈ {100, 1000, 5000} genera:
+
+- **`diccionario_N.txt`**: N palabras unicas combinando silabas del español
+- **`texto_N_valido.txt`**: concatenacion de `numPal/10` palabras del diccionario
+  (siempre segmentable)
+- **`texto_N_mutado.txt`**: mismo texto con mutaciones aleatorias letra a letra
+  con probabilidad `1/(LF×10)`, donde `LF` es la longitud del texto
+
+La opcion `--seed N` permite reproducir exactamente los mismos ficheros.
 
 ---
 
@@ -121,37 +124,27 @@ Si.
 
 ### Ecuacion de recurrencia
 
-Sea `texto[0..n-1]` la cadena de entrada y `puede(i)` indicar si el sufijo `texto[i..n-1]` puede particionarse:
+Sea `texto[0..n-1]` la cadena y `puede(i)` = 1 si el sufijo `texto[i..n-1]` es particionable:
 
-- **Caso base**: `puede(n) = true` (cadena vacia)
-- **Recurrencia**: `puede(i) = OR_{j} (texto[i..j] en dicc AND puede(j+1))` para todo j tal que el prefijo este en el diccionario
+```
+puede(n) = 1                                              (caso base: cadena vacia)
+puede(i) = OR { texto[i..j] en dicc  AND  puede(j+1) }   para todo j >= i
+```
+
+### Variantes
+
+- **Variante 1**: implementacion directa de la recurrencia sin memoria. Puede recalcular
+  el mismo subproblema muchas veces → coste exponencial.
+- **Variante 2**: igual que la 1 pero con tabla `mem[i]` para no recalcular `puede(i)`.
+  Coste de la decision: O(n²).
+- **Variante 3**: rellena la tabla `posible[n..0]` de forma iterativa (sin recursion),
+  usando los valores ya calculados. Coste O(n²), sin sobrecarga de pila. Ademas, usa
+  `posible[]` para podar ramas muertas durante la enumeracion de particiones.
+
+En los tres casos, la enumeracion de todas las particiones validas puede ser exponencial
+si el numero de soluciones es muy grande.
 
 ### Estructura de datos del diccionario
 
-Se utiliza una **tabla hash** (funcion djb2) para permitir busqueda de palabras en tiempo O(1) promedio, en lugar de O(m) con busqueda lineal en un array de m palabras.
-
-### Reduccion del tiempo de ejecucion
-
-- **Variante 1**: Complejidad exponencial por solapamiento de subproblemas
-- **Variante 2**: Memoizacion evita recalcular `puede(i)`, reduciendo a O(n^2) llamadas
-- **Variante 3**: Tabla rellena de forma ordenada (desde n hacia 0), coste O(n^2) en tiempo y O(n) en espacio adicional
-
----
-
-## Repeticion de las pruebas
-
-Para que los profesores puedan repetir las pruebas:
-
-1. Descomprimir `practica2.zip` (o el nombre del directorio entregado)
-2. Navegar al directorio de la practica
-3. Ejecutar: `bash ejecutar.sh`
-
-El script compila y ejecuta automaticamente todos los casos de prueba definidos.
-
----
-
-## Notas adicionales
-
-- El programa debe ejecutarse en el entorno **lab000** (Linux)
-- No hay menus interactivos; todo se controla mediante argumentos de linea de comandos
-- Los ficheros de prueba incluyen los ejemplos del enunciado de la practica
+Tabla hash con funcion djb2 y resolucion de colisiones por encadenamiento.
+Permite busqueda en O(1) promedio frente a O(m) de busqueda lineal.

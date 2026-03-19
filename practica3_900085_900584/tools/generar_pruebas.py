@@ -68,10 +68,23 @@ def generar_fichero(nombre, casos, rng):
         f.write(f"{len(casos)}\n")
         for n, c_count, k, densidad in casos:
             aristas = generar_grafo_conexo(n, densidad=densidad, rng=rng)
-            # Elegir c centros existentes aleatorios
             nodos = list(range(1, n + 1))
             rng.shuffle(nodos)
             existentes = sorted(nodos[:c_count])
+            escribir_caso(f, n, aristas, existentes, k)
+    print(f"  Generado: {ruta}")
+
+
+def generar_fichero_mismo_grafo(nombre, n, c_count, ks, densidad, rng):
+    """Genera un fichero con el MISMO grafo y distintos valores de k."""
+    ruta = os.path.join(PRUEBAS_DIR, nombre)
+    aristas = generar_grafo_conexo(n, densidad=densidad, rng=rng)
+    nodos = list(range(1, n + 1))
+    rng.shuffle(nodos)
+    existentes = sorted(nodos[:c_count])
+    with open(ruta, 'w') as f:
+        f.write(f"{len(ks)}\n")
+        for k in ks:
             escribir_caso(f, n, aristas, existentes, k)
     print(f"  Generado: {ruta}")
 
@@ -98,15 +111,9 @@ def main():
         (25, 2, 2, 0.2),
     ], rng)
 
-    # Experimento 2: Variar k con n fijo
-    generar_fichero("exp_variar_k.txt", [
-        (15, 2, 1, 0.3),
-        (15, 2, 2, 0.3),
-        (15, 2, 3, 0.3),
-        (15, 2, 4, 0.3),
-        (15, 2, 5, 0.3),
-        (15, 2, 6, 0.3),
-    ], rng)
+    # Experimento 2: Variar k con n fijo (MISMO grafo para todos los k)
+    generar_fichero_mismo_grafo("exp_variar_k.txt",
+        n=15, c_count=2, ks=[1, 2, 3, 4, 5, 6], densidad=0.3, rng=rng)
 
     # Experimento 3: Casos mas grandes (para ver limites)
     generar_fichero("exp_grande.txt", [

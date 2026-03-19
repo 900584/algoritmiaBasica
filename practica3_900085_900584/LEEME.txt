@@ -1,0 +1,139 @@
+===============================================================================
+Practica 3: Busqueda con retroceso - Ubicacion de centros de urgencias
+===============================================================================
+
+Algoritmia Basica - Grado en Ingenieria Informatica - Curso 2025/26
+Universidad de Zaragoza
+
+Autores:
+  - Ibon Castarlenas Cortes  — NIA: 900085
+  - David Puertolas Merenciano — NIA: 900584
+
+===============================================================================
+DESCRIPCION
+===============================================================================
+
+Dado un grafo no dirigido ponderado que representa localidades conectadas por
+carreteras, con centros de urgencias ya existentes en algunas de ellas, este
+programa encuentra la ubicacion optima de k nuevos centros de urgencias que
+minimiza el peor tiempo de acceso desde cualquier localidad al centro mas
+cercano (existente o nuevo).
+
+Algoritmo:
+  1) Floyd-Warshall para calcular distancias minimas entre todos los pares
+     de localidades.
+  2) Backtracking combinatorio para explorar subconjuntos de k localidades,
+     con poda por cota (si la solucion parcial no puede mejorar la mejor
+     conocida, se descarta la rama).
+  3) Heuristica voraz (greedy) para obtener una buena solucion inicial que
+     mejore la poda del backtracking.
+
+===============================================================================
+ESTRUCTURA DEL DIRECTORIO
+===============================================================================
+
+practica3_900085_900584/
+├── LEEME.txt                          # Este fichero
+├── ejecutar.sh                        # Compila, ejecuta pruebas y experimentos
+├── memoria.pdf                        # Informe de la practica (max 4 paginas)
+├── code/
+│   └── ubicaCentros.c                 # Codigo fuente del programa
+├── tools/
+│   └── generar_pruebas.py             # Genera grafos aleatorios para experimentos
+├── pruebas/
+│   ├── ejemplo_enunciado.txt          # Los 2 ejemplos del enunciado
+│   ├── caso_trivial.txt               # 3 casos pequenos verificables a mano
+│   ├── caso_mediano.txt               # 1 caso con 10 localidades
+│   ├── exp_variar_n.txt               # Generado: experimento variando n
+│   ├── exp_variar_k.txt               # Generado: experimento variando k
+│   └── exp_grande.txt                 # Generado: casos grandes
+└── resultados/
+    ├── resultado_enunciado.txt        # Resultados de los ejemplos
+    ├── resultado_trivial.txt          # Resultados de los triviales
+    ├── resultado_mediano.txt          # Resultado del caso mediano
+    ├── resultado_variar_n.txt         # Resultados del experimento 1
+    ├── resultado_variar_k.txt         # Resultados del experimento 2
+    └── resultado_grande.txt           # Resultados del experimento 3
+
+Los ficheros exp_*.txt se generan automaticamente al ejecutar bash ejecutar.sh
+(o manualmente con python3 tools/generar_pruebas.py).
+
+===============================================================================
+COMPILACION Y EJECUCION
+===============================================================================
+
+Compilacion manual:
+
+    gcc -O2 -o ubicaCentros code/ubicaCentros.c -std=c99 -lm
+
+Uso del programa:
+
+    ./ubicaCentros <entrada> <salida>
+
+  - <entrada>: fichero de texto con los casos de prueba
+  - <salida> : fichero donde se escriben los resultados
+
+Ejecucion automatica (pruebas + experimentos):
+
+    bash ejecutar.sh
+
+El script:
+  1. Compila el programa
+  2. Ejecuta los casos de verificacion (ejemplos del enunciado, triviales, mediano)
+  3. Genera los ficheros de experimentos (generar_pruebas.py)
+  4. Ejecuta los tres bloques de experimentos
+
+===============================================================================
+FORMATO DE ENTRADA
+===============================================================================
+
+La primera linea contiene el numero total de casos de prueba. Cada caso:
+
+  n m c k
+  v1 w1 t1       (m lineas: aristas con peso)
+  ...
+  vm wm tm
+  e1 e2 ... ec   (localidades con centros existentes)
+
+Vertices numerados de 1 a n. Pesos en minutos.
+
+===============================================================================
+FORMATO DE SALIDA
+===============================================================================
+
+Una linea por caso de prueba:
+
+  tiempo_ms  n_nodos  valor_optimo  s1 s2 ... sk
+
+  - tiempo_ms:     tiempo de ejecucion en milisegundos
+  - n_nodos:       nodos del arbol de busqueda generados
+  - valor_optimo:  minimo peor tiempo de acceso
+  - s1 ... sk:     localidades de los nuevos centros (ordenadas crecientemente)
+
+===============================================================================
+DISENO DEL ALGORITMO
+===============================================================================
+
+Representacion de soluciones:
+  Tupla (s1, s2, ..., sk) con s1 < s2 < ... < sk, donde cada si es una
+  localidad candidata (no tiene centro existente).
+
+Restricciones:
+  - Explicitas: si pertenece a {1, ..., n} \ E (localidades sin centro)
+  - Implicitas: s1 < s2 < ... < sk (evitar permutaciones, solo combinaciones)
+
+Arbol de busqueda:
+  Arbol combinatorio de profundidad k. En el nivel j se elige la j-esima
+  localidad con indice mayor que la elegida en el nivel j-1.
+  Tamano: C(n-c, k) hojas, que es O((n-c)^k / k!).
+
+Predicados acotadores (poda):
+  1) Cota greedy inicial: antes del backtracking, una heuristica voraz
+     proporciona una solucion razonable como cota superior inicial.
+  2) Poda por cota parcial: si el peor tiempo con los centros ya elegidos
+     es >= mejor_valor conocido, se analiza si los candidatos restantes
+     pueden mejorar la localidad critica. Si no, se poda la rama.
+  3) Poda combinatoria: solo se exploran combinaciones (indices crecientes),
+     eliminando permutaciones redundantes.
+
+===============================================================================

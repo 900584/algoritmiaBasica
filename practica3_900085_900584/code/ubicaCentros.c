@@ -177,7 +177,7 @@ static int cota_parcial(const int *sol, int nivel) {
  *     >= mejor_valor, no merece la pena explorar mas (los centros restantes
  *     solo pueden mejorar algunas localidades, pero si la actual ya no
  *     mejora, descartamos). NOTA: realmente la parcial SI puede mejorar al
- *     anadir mas centros. Usamos una poda mas conservadora pero util:
+ *     añadir mas centros. Usamos una poda mas conservadora pero util:
  *     calculamos la cota con los centros actuales. Si ya iguala o supera
  *     la mejor, y queda algun centro por colocar, aun podria mejorar.
  *     Pero si el peor nodo actual es uno que NINGUN candidato restante puede
@@ -193,7 +193,7 @@ static int cota_parcial(const int *sol, int nivel) {
  *
  * Implementacion practica: usamos una poda simple pero efectiva:
  *   En cada nodo, calculamos el peor tiempo con la solucion parcial.
- *   Si este ya es >= mejor_valor, seguimos (aun podria mejorar al anadir
+ *   Si este ya es >= mejor_valor, seguimos (aun podria mejorar al añadir
  *   mas centros). Pero si nivel == k, actualizamos. La poda real se hace
  *   comparando: si evaluar la solucion parcial da un valor >= mejor_valor
  *   Y no quedan centros por poner, podamos. Ademas, si hay una sola
@@ -229,7 +229,7 @@ static void backtracking(int nivel, int inicio) {
         /*
          * Poda: con los centros elegidos hasta ahora (nivel+1 centros),
          * si el peor tiempo ya es >= mejor_valor, aun podriamos mejorar
-         * anadiendo mas centros. Pero podemos hacer una poda parcial:
+         * añadiendo mas centros. Pero podemos hacer una poda parcial:
          * calculamos el peor tiempo de la solucion parcial actual.
          * Si con nivel+1 centros el peor tiempo ya es >= mejor_valor,
          * y los candidatos restantes no mejoran esa localidad critica,

@@ -1,0 +1,12 @@
+Caso 1
+N=6
+Tiempo_ms=0.000
+Nodos_generados=11
+Valor_optimo=42
+
+Caso 2
+N=9
+Tiempo_ms=0.000
+Nodos_generados=259
+Valor_optimo=73
+

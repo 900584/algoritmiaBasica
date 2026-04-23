@@ -1,0 +1,77 @@
+Practica 4 - Algoritmia Basica (Ramificacion y poda)
+Autores:
+- David Puertolas Merenciano (900584)
+- Ibon Castarlenas Cortes (90085)
+
+========================================
+1) Organizacion del directorio
+========================================
+- LEEME.txt: este fichero.
+- Makefile: compilacion de los programas.
+- ejecutar.sh: script para compilar, ejecutar y validar pruebas.
+- informe.md: informe de las tareas 1, 2 y 3.
+- src/formarEquipos.c: programa principal (ramificacion y poda).
+- src/verificar_bruteforce.c: validador exacto por fuerza bruta (solo para N pequenos).
+- pruebas/pruebas.txt: casos de validacion funcional.
+- pruebas/experimentos.txt: casos para medir prestaciones.
+- resultados/: salidas generadas por ejecutar.sh.
+
+========================================
+2) Requisitos
+========================================
+- Compilador C compatible con C11 (gcc recomendado).
+- make
+- bash (para ejecutar ejecutar.sh)
+
+========================================
+3) Instalacion / compilacion
+========================================
+Desde el directorio practica4:
+
+  make
+
+Esto genera:
+- formarEquipos
+- verificarBruteforce
+
+Para limpiar binarios y resultados:
+
+  make clean
+
+========================================
+4) Ejecucion
+========================================
+Ejecucion manual:
+
+  ./formarEquipos pruebas/pruebas.txt resultados/resultados_pruebas.txt
+
+Formato:
+
+  ./formarEquipos <entrada.txt> <salida.txt>
+
+Ejecucion completa automatizada:
+
+  chmod +x ejecutar.sh
+  ./ejecutar.sh
+
+========================================
+5) Repeticion de pruebas
+========================================
+La forma recomendada de repetir todo:
+
+  ./ejecutar.sh
+
+El script:
+1. Compila.
+2. Ejecuta Branch&Bound sobre pruebas y experimentos.
+3. Ejecuta fuerza bruta en pruebas pequenas.
+4. Compara automaticamente los valores optimos de ambos metodos
+   para verificar correccion.
+
+========================================
+6) Notas
+========================================
+- El programa principal soporta N <= 63 (mascara de bits de 64 bits).
+- El verificador por fuerza bruta esta pensado para N <= 18 debido al
+  coste combinatorio.
+- La tarea 4 (programacion lineal) no se incluye en esta entrega.

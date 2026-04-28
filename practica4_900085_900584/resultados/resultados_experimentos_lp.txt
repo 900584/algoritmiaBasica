@@ -1,6 +1,6 @@
 Caso 1
 N=12
-Tiempo_ms=20.508
+Tiempo_ms=21.597
 Variables_binarias=220
 Estado=Optimal
 Valor_optimo=67
@@ -12,7 +12,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 2
 N=12
-Tiempo_ms=26.489
+Tiempo_ms=27.224
 Variables_binarias=220
 Estado=Optimal
 Valor_optimo=66
@@ -24,7 +24,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 3
 N=12
-Tiempo_ms=20.456
+Tiempo_ms=19.237
 Variables_binarias=220
 Estado=Optimal
 Valor_optimo=62
@@ -36,7 +36,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 4
 N=15
-Tiempo_ms=26.305
+Tiempo_ms=24.617
 Variables_binarias=455
 Estado=Optimal
 Valor_optimo=83
@@ -49,7 +49,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 5
 N=15
-Tiempo_ms=25.254
+Tiempo_ms=25.170
 Variables_binarias=455
 Estado=Optimal
 Valor_optimo=68
@@ -62,7 +62,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 6
 N=15
-Tiempo_ms=26.777
+Tiempo_ms=24.402
 Variables_binarias=455
 Estado=Optimal
 Valor_optimo=89
@@ -75,7 +75,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 7
 N=18
-Tiempo_ms=33.322
+Tiempo_ms=33.678
 Variables_binarias=816
 Estado=Optimal
 Valor_optimo=74
@@ -89,7 +89,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 8
 N=18
-Tiempo_ms=33.697
+Tiempo_ms=35.154
 Variables_binarias=816
 Estado=Optimal
 Valor_optimo=94
@@ -103,7 +103,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 9
 N=18
-Tiempo_ms=35.750
+Tiempo_ms=34.161
 Variables_binarias=816
 Estado=Optimal
 Valor_optimo=91
@@ -117,7 +117,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 10
 N=18
-Tiempo_ms=62.393
+Tiempo_ms=64.279
 Variables_binarias=816
 Estado=Optimal
 Valor_optimo=102
@@ -131,7 +131,7 @@ Equipos_optimos (indices 1..N):
 
 Caso 11
 N=18
-Tiempo_ms=31.262
+Tiempo_ms=30.707
 Variables_binarias=816
 Estado=Optimal
 Valor_optimo=98

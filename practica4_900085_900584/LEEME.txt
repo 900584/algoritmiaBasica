@@ -1,4 +1,4 @@
-Practica 4 - Algoritmia Basica (Ramificacion y poda)
+Practica 4 - Algoritmia Basica (Ramificacion y poda + Programacion lineal)
 Autores:
 - David Puertolas Merenciano (900584)
 - Ibon Castarlenas Cortes (90085)
@@ -7,21 +7,28 @@ Autores:
 1) Organizacion del directorio
 ========================================
 - LEEME.txt: este fichero.
-- Makefile: compilacion de los programas.
-- ejecutar.sh: script para compilar, ejecutar y validar pruebas.
-- informe.md: informe de las tareas 1, 2 y 3.
-- src/formarEquipos.c: programa principal (ramificacion y poda).
-- src/verificar_bruteforce.c: validador exacto por fuerza bruta (solo para N pequenos).
-- pruebas/pruebas.txt: casos de validacion funcional.
-- pruebas/experimentos.txt: casos para medir prestaciones.
-- resultados/: salidas generadas por ejecutar.sh.
+- Makefile: compilacion de los programas C.
+- ejecutar.sh: script bash para compilar, ejecutar y validar todas las pruebas.
+- ejecutar_windows.ps1: equivalente al anterior para PowerShell (Windows).
+- informe.md: informe completo (Tareas 1-4 y Conclusiones).
+- src/formarEquipos.c: programa principal (ramificacion y poda, Tarea 2).
+- src/verificar_bruteforce.c: validador exacto por fuerza bruta (N pequenos).
+- src/resolverLP.py: solucion ILP con PuLP/CBC (Tarea 4).
+- pruebas/pruebas.txt: casos de validacion funcional (N=6, N=9).
+- pruebas/experimentos.txt: casos de experimentacion (N=12, N=15, N=18).
+- resultados/: salidas generadas por ejecutar.sh / ejecutar_windows.ps1.
 
 ========================================
 2) Requisitos
 ========================================
+Para las Tareas 1-3 (Branch&Bound):
 - Compilador C compatible con C11 (gcc recomendado).
 - make
-- bash (para ejecutar ejecutar.sh)
+
+Para la Tarea 4 (Programacion lineal):
+- Python 3.8 o superior.
+- Libreria PuLP (incluye el solver CBC):
+    pip install pulp
 
 ========================================
 3) Instalacion / compilacion
@@ -31,8 +38,8 @@ Desde el directorio practica4:
   make
 
 Esto genera:
-- formarEquipos
-- verificarBruteforce
+- formarEquipos (o .exe en Windows)
+- verificarBruteforce (o .exe en Windows)
 
 Para limpiar binarios y resultados:
 
@@ -41,37 +48,44 @@ Para limpiar binarios y resultados:
 ========================================
 4) Ejecucion
 ========================================
-Ejecucion manual:
+Ejecucion manual de Branch&Bound:
 
   ./formarEquipos pruebas/pruebas.txt resultados/resultados_pruebas.txt
 
-Formato:
+Ejecucion manual de ILP:
+
+  python3 src/resolverLP.py pruebas/pruebas.txt resultados/resultados_pruebas_lp.txt
+
+Formato general:
 
   ./formarEquipos <entrada.txt> <salida.txt>
-
-Ejecucion completa automatizada:
-
-  chmod +x ejecutar.sh
-  ./ejecutar.sh
+  python3 src/resolverLP.py <entrada.txt> <salida.txt>
 
 ========================================
 5) Repeticion de pruebas
 ========================================
 La forma recomendada de repetir todo:
 
-  ./ejecutar.sh
+  En Linux/Mac:
+    chmod +x ejecutar.sh
+    ./ejecutar.sh
 
-El script:
-1. Compila.
+  En Windows (PowerShell):
+    .\ejecutar_windows.ps1
+
+El script realiza los siguientes pasos:
+1. Compila los programas C.
 2. Ejecuta Branch&Bound sobre pruebas y experimentos.
-3. Ejecuta fuerza bruta en pruebas pequenas.
-4. Compara automaticamente los valores optimos de ambos metodos
-   para verificar correccion.
+3. Ejecuta el verificador por fuerza bruta en pruebas pequenas.
+4. Compara automaticamente BnB con fuerza bruta.
+5. Ejecuta el solver ILP (Tarea 4) sobre pruebas y experimentos.
+6. Compara automaticamente BnB con ILP.
 
 ========================================
 6) Notas
 ========================================
 - El programa principal soporta N <= 63 (mascara de bits de 64 bits).
-- El verificador por fuerza bruta esta pensado para N <= 18 debido al
-  coste combinatorio.
-- La tarea 4 (programacion lineal) no se incluye en esta entrega.
+- El verificador por fuerza bruta esta pensado para N <= 12 aprox.
+- El ILP (resolverLP.py) no tiene limite de N practico para los rangos
+  considerados; con N=18 resuelve en < 65 ms.
+- PuLP usa el solver CBC de COIN-OR (incluido en el paquete pip).

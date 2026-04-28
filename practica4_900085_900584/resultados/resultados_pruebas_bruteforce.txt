@@ -7,6 +7,6 @@ Valor_optimo=42
 Caso 2
 N=9
 Tiempo_ms=0.000
-Nodos_explorados=390
-Valor_optimo=48
+Nodos_explorados=567
+Valor_optimo=73
 

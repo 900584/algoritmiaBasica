@@ -168,7 +168,91 @@ Tras ejecutar el programa con `pruebas/pruebas.txt` y `pruebas/experimentos.txt`
 
 ## 4. (Tarea 4) Enfoque con programacion lineal
 
-Esta parte se deja fuera de esta entrega, al estar asignada al otro miembro del equipo.
+### 4.1 Formalizacion como problema de programacion lineal entera (ILP)
+
+**Variables de decision.** Para cada terna ordenada \(i < j < k\) con \(i,j,k \in \{0,\ldots,N-1\}\):
+
+\[
+x_{ijk} \in \{0,1\}, \quad x_{ijk}=1 \iff \text{los participantes } i,j,k \text{ forman un equipo.}
+\]
+
+El numero total de variables binarias es \(\binom{N}{3}\).
+
+**Funcion objetivo.** Minimizar el conflicto total:
+
+\[
+\min \sum_{i<j<k} \bigl(c_{ij}+c_{ik}+c_{ji}+c_{jk}+c_{ki}+c_{kj}\bigr)\,x_{ijk}
+\]
+
+**Restricciones de cobertura exacta.** Cada participante \(p\) pertenece a exactamente un equipo:
+
+\[
+\sum_{\substack{i<j<k \\ p\,\in\,\{i,j,k\}}} x_{ijk} = 1 \quad \forall p \in \{0,\ldots,N-1\}
+\]
+
+El modelo tiene \(\binom{N}{3}\) variables y \(N\) restricciones de igualdad (ademas de la integralidad).
+
+### 4.2 Implementacion
+
+Se utiliza la libreria Python **PuLP** (version libre, incluye el solver **CBC** de COIN-OR):
+
+```
+pip install pulp
+```
+
+El programa `src/resolverLP.py` lee el mismo formato de entrada que `formarEquipos.c` y escribe el mismo formato de salida. Por cada caso de prueba:
+
+1. Genera todas las ternas \(\binom{N}{3}\) y calcula su coste.
+2. Construye el modelo ILP con PuLP.
+3. Lo resuelve con CBC (sin mensajes de consola).
+4. Escribe tiempo, numero de variables, estado, valor optimo y equipos.
+
+Ejecucion:
+
+```
+python3 src/resolverLP.py pruebas/pruebas.txt resultados/resultados_pruebas_lp.txt
+python3 src/resolverLP.py pruebas/experimentos.txt resultados/resultados_experimentos_lp.txt
+```
+
+### 4.3 Validacion y comparacion de resultados
+
+Los valores optimos obtenidos por ILP y por Branch\&Bound coinciden en **todos los casos de prueba**, lo que valida la correctitud de ambas implementaciones.
+
+**Casos de validacion funcional** (`pruebas/pruebas.txt`):
+
+| Caso | N | Opt. BnB | Opt. ILP | Variables ILP |
+|------|---|----------|----------|---------------|
+| 1    | 6 | 42       | 42       | 20            |
+| 2    | 9 | 73       | 73       | 84            |
+
+**Casos de experimentacion** (`pruebas/experimentos.txt`):
+
+| Caso | N  | Opt. BnB | Opt. ILP | T. BnB (ms) | T. ILP (ms) | Var. ILP |
+|------|----|----------|----------|-------------|-------------|----------|
+| 1    | 12 | 67       | 67       | 1           | 22          | 220      |
+| 2    | 12 | 66       | 66       | 0           | 26          | 220      |
+| 3    | 12 | 62       | 62       | 1           | 22          | 220      |
+| 4    | 15 | 83       | 83       | 8           | 27          | 455      |
+| 5    | 15 | 68       | 68       | 12          | 27          | 455      |
+| 6    | 15 | 89       | 89       | 19          | 25          | 455      |
+| 7    | 18 | 74       | 74       | 88          | 34          | 816      |
+| 8    | 18 | 94       | 94       | 264         | 34          | 816      |
+| 9    | 18 | 91       | 91       | 384         | 34          | 816      |
+| 10   | 18 | 102      | 102      | 823         | 62          | 816      |
+| 11   | 18 | 98       | 98       | 528         | 31          | 816      |
+
+### 4.4 Analisis comparativo
+
+- **Correctitud:** ILP y BnB producen siempre el mismo valor optimo, lo que valida la correccion de ambos enfoques.
+
+- **Escalabilidad del ILP:** el numero de variables crece como \(\binom{N}{3} \sim O(N^3)\), pero el tiempo del solver CBC permanece muy bajo (< 65 ms hasta N=18) porque la relajacion lineal de este ILP de cobertura exacta suele tener soluciones fraccionarias muy cercanas a enteras, lo que hace que el branch-and-cut interno converja rapido.
+
+- **Comparacion de tiempos:**
+  - Para N=12, BnB (0-1 ms) es mas rapido que ILP (22-26 ms), pues la sobrecarga de Python y el arranque del solver CBC domina en instancias pequenas.
+  - Para N=15, los tiempos son comparables (BnB 8-19 ms, ILP ~25-27 ms).
+  - Para N=18, ILP (31-62 ms) supera claramente a BnB (88-823 ms): el solver de PL aprovecha la estructura del problema de cobertura exacta mejor que el BnB ad hoc para estas instancias.
+
+- **Variabilidad:** BnB muestra alta variabilidad entre instancias del mismo N (88 ms vs 823 ms para N=18) dependiendo de la estructura de la matriz de conflictos, mientras que ILP es mas predecible.
 
 ---
 

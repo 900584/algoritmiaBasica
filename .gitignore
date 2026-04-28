@@ -1,0 +1,17 @@
+# Binarios compilados
+*.exe
+*.o
+formarEquipos
+verificarBruteforce
+
+# Resultados generados (se reproducen con ejecutar.sh)
+resultados/*.txt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor
+.vscode/
+*.swp
